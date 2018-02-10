@@ -53,6 +53,8 @@ x64/
 *.pidb
 *.log
 *.scc
+*.vscode
+*.csproj
 
 # OS generated files #
 .DS_Store*
