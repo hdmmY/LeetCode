@@ -1,0 +1,83 @@
+using System;
+
+namespace Leetcode10
+{
+    class Program
+    {
+        static void Main (string[] args)
+        {
+            var solu = new Solution ();
+
+            string text = "aa";
+            string pattern = "a";
+
+            Console.WriteLine (solu.IsMatch (text, pattern));
+        }
+    }
+
+    public class Solution
+    {
+        // Recursion
+        // public bool IsMatch (string text, string pattern)
+        // {
+        //     if (string.IsNullOrEmpty (pattern)) return string.IsNullOrEmpty (text);
+
+        //     bool firstMatch = !string.IsNullOrEmpty (text) &&
+        //         (text[0] == pattern[0] || pattern[0] == '.');
+
+        //     if (pattern.Length >= 2)
+        //     {
+        //         if (pattern[1] == '*')
+        //         {
+        //             return IsMatch (text, pattern.Substring (2)) ||
+        //                 (firstMatch && IsMatch (text.Substring (1), pattern));
+        //         }
+        //     }
+
+        //     return firstMatch && IsMatch (text.Substring (1), pattern.Substring (1));
+        // }
+
+        bool?[, ] c;
+
+        public bool IsMatch (string text, string pattern)
+        {
+            c = new bool?[text.Length + 1, pattern.Length + 1];
+
+            return dp (0, 0, text, pattern);
+        }
+
+        private bool dp (int i, int j, string text, string pattern)
+        {
+            if (c[i, j] != null)
+            {
+                return c[i, j].Value;
+            }
+
+            bool answear;
+
+            if (j == pattern.Length)
+            {
+                answear = i == text.Length;
+            }
+            else
+            {
+                bool firstMatch = text.Length > i &&
+                    (text[i] == pattern[j] || pattern[j] == '.');
+
+                if (pattern.Length > j + 1 && pattern[j + 1] == '*')
+                {
+                    answear = dp (i, j + 2, text, pattern) ||
+                        (firstMatch && dp (i + 1, j, text, pattern));
+                }
+                else
+                {
+                    answear = firstMatch && dp (i + 1, j + 1, text, pattern);
+                }
+            }
+
+            c[i, j] = answear;
+
+            return answear;
+        }
+    }
+}
